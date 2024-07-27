@@ -195,28 +195,18 @@ notebook: [Open In Google Colab](https://colab.research.google.com/github/google
     license='Apache License 2.0',
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Operating System :: OS Independent',
     ],
     keywords='machine learning control physics MuJoCo AI',
     python_requires='>=3.8',
-    install_requires=[
-        'absl-py>=0.7.0',
-        'dm-env',
-        'dm-tree != 0.1.2',
-        'glfw',
-        'labmaze',
-        'lxml',
-        'mujoco >= 3.2.0',
-        'numpy >= 1.9.0',
-        'protobuf >= 3.19.4',  # TensorFlow requires protobuf<3.20 (b/182876485)
-        'pyopengl >= 3.1.4',
-        'pyparsing >= 3.0.0',
-        'requests',
-        'setuptools!=50.0.0',  # https://github.com/pypa/setuptools/issues/2350
-        'scipy',
-        'tqdm',
-    ],
+    install_requires=read_requirements('requirements.txt'),
     extras_require={
         'HDF5': ['h5py'],
+        'dev': read_requirements('requirements-dev.txt'),
     },
     tests_require=[
         'mock',
@@ -225,29 +215,27 @@ notebook: [Open In Google Colab](https://colab.research.google.com/github/google
     ],
     test_suite='nose.collector',
     packages=find_packages(),
+    include_package_data=True,
     package_data={
-        'dm_control': find_data_files(
-            package_dir='dm_control',
-            patterns=[
-                '*.amc',
-                '*.msh',
-                '*.png',
-                '*.skn',
-                '*.stl',
-                '*.xml',
-                '*.textproto',
-                '*.h5',
-            ],
-            excludes=[
-                '*/dog_assets/extras/*',
-                '*/kinova/meshes/*',  # Exclude non-decimated meshes.
-            ],
-        ),
+        'dm_control': [
+            '*.amc',
+            '*.msh',
+            '*.png',
+            '*.skn',
+            '*.stl',
+            '*.xml',
+            '*.textproto',
+            '*.h5',
+        ],
     },
     cmdclass={
         'build_mjbindings': BuildMJBindingsCommand,
         'install': InstallCommand,
         'test': TestCommand,
     },
-    entry_points={},
+    entry_points={
+        'console_scripts': [
+            'dm_control_cli=dm_control.cli:main',
+        ],
+    },
 )
